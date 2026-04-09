@@ -1,0 +1,40 @@
+spring:
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        '[format_sql]': true
+        '[show_sql]': true
+        hbm2ddl:
+          auto: update
+        highlight_sql: true
+        order_inserts: true
+        order_updates: true
+  datasource:
+    db1:
+#      jdbc-url: ${DB_URL}
+#      username: ${DB_USERNAME:root}
+#      password: ${DB_PASSWORD}
+      pool-name: HikariPool-2
+      timeout: 30000
+      data-source-class-name: com.mysql.cj.jdbc.MysqlDataSource
+      data-source-properties:
+        databaseName: ${DB_NAME}
+        user: ${DB_USERNAME:root}
+        password: ${DB_PASSWORD}
+        allowPublicKeyRetrieval: true
+        useSSL: false
+        serverTimezone: UTC
+        characterEncoding: UTF-8
+logging:
+  level:
+    '[com.zaxxer.hikari.HikariDataSource]': DEBUG
+    '[org.hibernate.SQL]': DEBUG
+
+token:
+  access:
+    key: ${ACCESS_TOKEN_KEY:hello-world}
+    exp: 36
+  refresh:
+    key: ${REFRESH_TOKEN_KEY:java-application}
+    exp: 18

@@ -1,0 +1,12 @@
+servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 10MB
+  path: /api/
+spring:
+  banner:
+    mode: off
+  name: real-time-chat
+  profiles:
+    active: @spring.profiles.active@
+
