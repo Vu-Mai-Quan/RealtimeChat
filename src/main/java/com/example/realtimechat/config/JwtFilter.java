@@ -2,7 +2,6 @@ package com.example.realtimechat.config;
 
 import com.example.realtimechat.service.JwtService;
 import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;

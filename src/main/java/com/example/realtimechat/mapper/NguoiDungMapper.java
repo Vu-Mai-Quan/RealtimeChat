@@ -3,8 +3,6 @@ package com.example.realtimechat.mapper;
 import com.example.realtimechat.db1.model.NguoiDung;
 import com.example.realtimechat.db1.model.NguoiDung.NguoiDungDangKi;
 import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public abstract class NguoiDungMapper {
