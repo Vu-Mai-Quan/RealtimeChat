@@ -20,12 +20,16 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -36,9 +40,11 @@ public class SecurityConfig {
             POST, new String[]{
                     "/auth/sign-in",
                     "/auth/sign-up",
-                    "/auth/refresh-token"
+                    "/auth/refresh-token",
+
             },
-            GET, new String[]{}
+            GET, new String[]{},
+            PATCH, new String[]{"/auth/sign-out",}
     );
     private final
     ObjectMapper objectMapper;
@@ -52,10 +58,22 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class).authorizeHttpRequests(rq -> {
                     rq.requestMatchers(GET, publicEndpoint.getOrDefault(GET, defaultPublic)).permitAll();
                     rq.requestMatchers(POST, publicEndpoint.getOrDefault(HttpMethod.POST, defaultPublic)).permitAll();
+                    rq.requestMatchers(PATCH, publicEndpoint.getOrDefault(PATCH, defaultPublic)).permitAll();
                     rq.anyRequest().authenticated();
                 }).exceptionHandling(ex -> {
                     ex.accessDeniedHandler(this::accessDeniedHandler);
                     ex.authenticationEntryPoint(this::authenticationEntryPoint);
+                }).sessionManagement(s -> s.sessionCreationPolicy(
+                        org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
+                .cors(cors -> {
+                    var config = new CorsConfiguration();
+                    config.addAllowedOrigin("http://localhost:4200");
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedHeaders(List.of("*"));
+                    config.setAllowCredentials(true);
+                    var source = new UrlBasedCorsConfigurationSource();
+                    source.registerCorsConfiguration("/**", config);
+                    cors.configurationSource(source);
                 })
                 .build();
     }
@@ -76,8 +94,9 @@ public class SecurityConfig {
                            @NonNull HttpServletResponse httpServletResponse, String baseMessage,
                            HttpStatus httpStatus) throws IOException {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, baseMessage);
+        problemDetail.setTitle("Authentication Failed");
         problemDetail.setProperty("error", e.getMessage());
-        problemDetail.setProperty("path", httpServletRequest.getRequestURI());
+        problemDetail.setInstance(URI.create(httpServletRequest.getRequestURI()));
         problemDetail.setProperty("timestamp", String.valueOf(System.currentTimeMillis()));
         httpServletResponse.setStatus(problemDetail.getStatus());
         httpServletResponse.setContentType("application/json");

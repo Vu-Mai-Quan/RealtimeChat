@@ -29,6 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final Set<String> excludedPaths = Set.of(
             "/api/auth/sign-in",
             "/api/auth/sign-up",
+            "/api/auth/sign-out",
             "/api/auth/refresh-token"
     );
 
