@@ -2,6 +2,7 @@ package com.example.realtimechat.db1.model;
 
 import com.example.realtimechat.db1.repositories.NguoiDungRepository;
 import com.example.realtimechat.templates.EntityBase;
+import com.example.realtimechat.validations.GroupValidation;
 import com.example.realtimechat.validations.ValueUniqueExist;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -31,6 +32,7 @@ public class NguoiDung extends EntityBase implements UserDetails {
 
     @Column(nullable = false, unique = true, updatable = false, length = 100)
     @ColumnTransformer(write = "LOWER(?)")
+
     String email;
 
     String password;
@@ -39,8 +41,6 @@ public class NguoiDung extends EntityBase implements UserDetails {
 //    @JdbcTypeCode(SqlTypes.NVARCHAR)
     String displayName;
 
-    //    @JdbcTypeCode(value = SqlTypes.JSON)
-//    Map<String, Object> information;
     @Column(name = "avatar_url")
     String avatarUrl;
 
@@ -81,12 +81,13 @@ public class NguoiDung extends EntityBase implements UserDetails {
      */
     @AllArgsConstructor
     @SuperBuilder
-    @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
+    @FieldDefaults(level = AccessLevel.PROTECTED)
     @Getter
+    @NoArgsConstructor
     public static class NguoiDungLogin {
         @Email(message = "Định dạng email không hợp lệ")
-
-        @ValueUniqueExist(field = "email", repository = NguoiDungRepository.class)
+        @ValueUniqueExist(field = "email", repository = NguoiDungRepository.class,
+                groups = {GroupValidation.OnCreate.class})
         String email;
         @NotBlank(message = "Mật khẩu không được để trống")
         String password;
@@ -97,22 +98,23 @@ public class NguoiDung extends EntityBase implements UserDetails {
      *
      */
     @SuperBuilder
-    @FieldDefaults(makeFinal = true, level = AccessLevel.PROTECTED)
+    @FieldDefaults(level = AccessLevel.PROTECTED)
     @Getter
+    @NoArgsConstructor
     public static class NguoiDungDangKi extends NguoiDungLogin {
         @NotBlank(message = "Họ không được để trống")
-        String fistName;
+        String firstName;
         @NotBlank(message = "Tên không được để trống")
         String lastName;
 
-        public NguoiDungDangKi(String email, String password, String fistName, String lastName) {
+        public NguoiDungDangKi(String email, String password, String firstName, String lastName) {
             super(email, password);
-            this.fistName = fistName;
+            this.firstName = firstName;
             this.lastName = lastName;
         }
 
         public String getDisplayName() {
-            return fistName.trim() + " " + lastName.trim();
+            return firstName.trim() + " " + lastName.trim();
         }
     }
 }
