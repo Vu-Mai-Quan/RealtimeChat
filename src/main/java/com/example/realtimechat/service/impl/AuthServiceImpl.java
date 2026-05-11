@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,14 +53,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public SignInResponse signIn(NguoiDung.NguoiDungLogin login) {
+    public SignInResponse signIn(NguoiDung.@NonNull NguoiDungLogin login) {
         Authentication au =
                 authenticationManager.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(login.getEmail(), login.getPassword()));
         var user = (NguoiDung) au.getPrincipal();
         return SignInResponse.builder()
                 .token(jwtService.generateToken(user))
                 .refreshToken(jwtService.generateRefreshToken(user))
-                .userInfo(Map.of("email", user.getUsername()))
+                .userInfo(Map.of("email", user.getUsername(),"displayName", user.getDisplayName()))
                 .build();
     }
 

@@ -40,10 +40,10 @@ public class SecurityConfig {
             POST, new String[]{
                     "/auth/sign-in",
                     "/auth/sign-up",
-                    "/auth/refresh-token",
+
 
             },
-            GET, new String[]{},
+            GET, new String[]{"/auth/refresh-token",},
             PATCH, new String[]{"/auth/sign-out",}
     );
     private final

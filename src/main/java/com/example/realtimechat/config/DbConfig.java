@@ -22,7 +22,6 @@ import java.util.Objects;
 @EnableConfigurationProperties(JpaProperties.class)
 public class DbConfig {
 
-
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.db1")
     public DataSource dataSourceOne() {
@@ -33,8 +32,6 @@ public class DbConfig {
     AbstractEntityManagerFactoryBean entityManagerFactory(DataSource dataSource,
                                                           @NonNull EntityManagerFactoryBuilder builder,
                                                           @NonNull JpaProperties properties) {
-
-
         return builder.dataSource(dataSource)
                 .packages("com.example.realtimechat.db1")
                 .properties(properties.getProperties())

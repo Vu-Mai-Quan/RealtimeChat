@@ -13,9 +13,12 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.swing.text.AsyncBoxView;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -67,6 +70,7 @@ public class NguoiDung extends EntityBase implements UserDetails {
     @PrePersist
     @PreUpdate
     void onCreateUpdate() {
+
         if (email != null) {
             email = email.trim();
         } else if (displayName != null) {

@@ -38,7 +38,7 @@ public class UserTokenServiceImpl implements JwtService<UserDetails> {
         this.jwtSecretKey = Keys.hmacShaKeyFor(Base64.encodeBase64(jwtSecretKey.getBytes(), true));
         this.refreshTokenKey = Keys.hmacShaKeyFor(Base64.encodeBase64(refreshTokenKey.getBytes(), true));
         this.refreshExp = refreshExp * 60 * 60 * 1000L;
-        this.accessExp = accessExp * 60 * 60 * 1000L;
+        this.accessExp = accessExp * 60 * 1000L;
     }
 
     @Override
@@ -74,9 +74,9 @@ public class UserTokenServiceImpl implements JwtService<UserDetails> {
     @Override
     public Jws<Claims> parseToken(String token) {
         var parser =Jwts.parserBuilder();
-//        var headerBody = token.split("\\.");
-//        var tokenWithNoKey = (headerBody[0]+"."+headerBody[1]+".");
-        var typeToken = TokenType.valueOf(parser.build().parse(token).getHeader().getType());
+        var headerBody = token.split("\\.");
+        var tokenWithNoKey = (headerBody[0]+"."+headerBody[1]+".");
+        var typeToken = TokenType.valueOf(parser.build().parse(tokenWithNoKey).getHeader().getType());
         return switch (typeToken) {
             case ACCESS -> parser.setSigningKey(this.jwtSecretKey).build().parseClaimsJws(token);
             case REFRESH -> parser.setSigningKey(this.refreshTokenKey).build().parseClaimsJws(token);
