@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.flyway.FlywayProperties;
 import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.sql.Date;
+import java.sql.Driver;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +34,7 @@ import static com.example.realtimechat.service.impl.UserTokenServiceImpl.TokenTy
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthController {
+
     AuthService authService;
     @Value("${token.refresh.exp}")
     long refreshExp;
@@ -46,6 +49,7 @@ public class AuthController {
             @RequestBody() @Validated({Default.class, GroupValidation.OnCreate.class})
             NguoiDung.NguoiDungDangKi nguoiDungDangKi) {
         if (authService.signUp(nguoiDungDangKi)) {
+
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -64,8 +68,8 @@ public class AuthController {
             httpHeaders.set(HttpHeaders.SET_COOKIE, cookie.toString());
             return ResponseEntity.ok().headers(httpHeaders).body(res);
         } catch (Exception e) {
-            ProblemDetail p = getProblemDetail(HttpStatus.LOCKED, e.getMessage(), httpRequest, "Sign-in fail");
-            return ResponseEntity.badRequest().body(p);
+            ProblemDetail p = getProblemDetail(HttpStatus.UNAUTHORIZED, e.getMessage(), httpRequest, "Sign-in fail");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(p);
         }
     }
 
@@ -91,7 +95,6 @@ public class AuthController {
         var p = ProblemDetail.forStatusAndDetail(status, detail);
         p.setInstance(URI.create(httpRequest.getRequestURI()));
         p.setTitle(title);
-        p.setType(URI.create(httpRequest.getRequestURI()));
         p.setProperty("timestamp", new Date(System.currentTimeMillis()));
         return p;
     }
@@ -110,9 +113,11 @@ public class AuthController {
     @GetMapping("refresh-token")
     ResponseEntity<?> refreshToken(HttpServletRequest httpRequest) {
         var token = getRefreshFromRq(httpRequest);
-        ResponseEntity<ProblemDetail> p = getProblemDetailResponseEntityWithRefreshToken(httpRequest, token, "Token " +
-                "lỗi", "refresh-token");
-        if (p != null) return p;
+        if (token == null) {
+           var p = getProblemDetail(HttpStatus.BAD_REQUEST, "Token " +
+                    "lỗi",httpRequest, "refresh-token-error");
+            return ResponseEntity.badRequest().body(p);
+        }
        try {
            return ResponseEntity.ok(Map.of("token", authService.createTokenFromRefreshToken(token)));
        }catch (JwtException e){

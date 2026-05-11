@@ -12,20 +12,20 @@ spring:
         order_updates: true
   datasource:
     db1:
-#      jdbc-url: ${DB_URL}
-#      username: ${DB_USERNAME:root}
-#      password: ${DB_PASSWORD}
+      jdbc-url: ${DB_URL}
+      username: ${DB_USERNAME:root}
+      password: ${DB_PASSWORD}
       pool-name: HikariPool-2
-      timeout: 30000
-      data-source-class-name: com.mysql.cj.jdbc.MysqlDataSource
-      data-source-properties:
-        databaseName: ${DB_NAME}
-        user: ${DB_USERNAME:root}
-        password: ${DB_PASSWORD}
-        allowPublicKeyRetrieval: true
-        useSSL: false
-        serverTimezone: UTC
-        characterEncoding: UTF-8
+      connection-timeout: 30000
+#      data-source-class-name: com.mysql.cj.jdbc.MysqlDataSource
+#      data-source-properties:
+#        databaseName: ${DB_NAME}
+#        user: ${DB_USERNAME:root}
+#        password: ${DB_PASSWORD}
+#        allowPublicKeyRetrieval: true
+#        useSSL: false
+#        serverTimezone: UTC
+#        characterEncoding: UTF-8
 logging:
   level:
     '[com.zaxxer.hikari.HikariDataSource]': DEBUG
@@ -33,8 +33,8 @@ logging:
 
 token:
   access:
-    key: ${ACCESS_TOKEN_KEY:hello-world}
-    exp: 36
+    key: ${ACCESS_TOKEN_KEY:ACCESS_TOKEN_KEY_ABCD}
+    exp: 1
   refresh:
-    key: ${REFRESH_TOKEN_KEY:java-application}
+    key: ${REFRESH_TOKEN_KEY:REFRESH_TOKEN_KEY_ABCD}
     exp: 18

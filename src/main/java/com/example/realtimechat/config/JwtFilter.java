@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/auth/refresh-token"
     );
 
-    public JwtFilter(JwtService<?> jwtService, ObjectMapper objectMapper) {
+    public JwtFilter(@Qualifier("userTokenServiceImpl") JwtService<?> jwtService, ObjectMapper objectMapper) {
         this.jwtService = jwtService;
         this.objectMapper = objectMapper;
     }
