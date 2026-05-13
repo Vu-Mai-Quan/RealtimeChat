@@ -97,6 +97,7 @@ public class NguoiDung extends EntityBase implements UserDetails {
         String password;
     }
 
+
     /**
      * Lớp DTO đăng kí
      *

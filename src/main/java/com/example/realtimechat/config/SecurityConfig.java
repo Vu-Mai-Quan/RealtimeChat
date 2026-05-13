@@ -21,7 +21,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
@@ -40,14 +39,11 @@ public class SecurityConfig {
             POST, new String[]{
                     "/auth/sign-in",
                     "/auth/sign-up",
-
-
             },
             GET, new String[]{"/auth/refresh-token",},
             PATCH, new String[]{"/auth/sign-out",}
     );
-    private final
-    ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     @Bean
     SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http, JwtService<?> jwtService) throws Exception {
@@ -68,7 +64,7 @@ public class SecurityConfig {
                 .cors(cors -> {
                     var config = new CorsConfiguration();
                     config.addAllowedOrigin("http://localhost:4200");
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
                     var source = new UrlBasedCorsConfigurationSource();

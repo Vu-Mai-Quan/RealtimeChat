@@ -114,14 +114,14 @@ public class AuthController {
     ResponseEntity<?> refreshToken(HttpServletRequest httpRequest) {
         var token = getRefreshFromRq(httpRequest);
         if (token == null) {
-           var p = getProblemDetail(HttpStatus.BAD_REQUEST, "Token " +
-                    "lỗi",httpRequest, "refresh-token-error");
+            var p = getProblemDetail(HttpStatus.BAD_REQUEST, "Token " +
+                    "lỗi", httpRequest, "refresh-token-error");
             return ResponseEntity.badRequest().body(p);
         }
-       try {
-           return ResponseEntity.ok(Map.of("token", authService.createTokenFromRefreshToken(token)));
-       }catch (JwtException e){
-           return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
-       }
+        try {
+            return ResponseEntity.ok(Map.of("token", authService.createTokenFromRefreshToken(token)));
+        } catch (JwtException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        }
     }
 }

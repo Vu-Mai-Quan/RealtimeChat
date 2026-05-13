@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,6 +37,9 @@ public class BeanConfig {
 
     @Bean
     UserCache userCache() {
+        Thread.ofVirtual().start(()->{
+            System.out.println("Virtual Thread start");
+        });
         return new SpringCacheBasedUserCache(new ConcurrentMapCache("users"));
     }
 
@@ -52,11 +56,8 @@ public class BeanConfig {
     //@NonNull HttpSecurity security, AuthenticationProvider
     //    authenticationProvider,
     @Bean
-    AuthenticationManager authenticationManager(@lombok.NonNull HttpSecurity security, AuthenticationProvider
+    AuthenticationManager authenticationManager(AuthenticationProvider
             authenticationProvider) throws Exception {
-        var man = security.getSharedObject(AuthenticationManagerBuilder.class);
-        man.authenticationProvider(authenticationProvider);
-
-        return  man.build();
+        return new ProviderManager(authenticationProvider);
     }
 }

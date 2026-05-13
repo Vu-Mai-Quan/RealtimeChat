@@ -15,18 +15,19 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -38,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
     JwtService<UserDetails> jwtService;
     PasswordEncoder passwordEncoder;
     AuthenticationManager authenticationManager;
+    UserCache userCache;
 
     @Override
     public boolean signUp(NguoiDung.NguoiDungDangKi nguoiDungDangKi) {
@@ -60,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
         return SignInResponse.builder()
                 .token(jwtService.generateToken(user))
                 .refreshToken(jwtService.generateRefreshToken(user))
-                .userInfo(Map.of("email", user.getUsername(),"displayName", user.getDisplayName()))
+                .userInfo(Map.of("email", user.getUsername(), "displayName", user.getDisplayName()))
                 .build();
     }
 
@@ -80,12 +82,24 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String createTokenFromRefreshToken(String refreshToken) {
         var paseToken = jwtService.parseToken(refreshToken);
-        var id = paseToken.getBody().getSubject();
-        var nd = nguoiDungRepository.findById(UUID.fromString(id));
-        Assert.isTrue(nd.isPresent(), "User not found with id: " + id);
+        var name = paseToken.getBody().getSubject();
+        var cache = userCache.getUserFromCache(name);
+        Optional<NguoiDung> nd = Optional.ofNullable(cache instanceof NguoiDung n ? n : null)
+                .or(() -> nguoiDungRepository.findByEmail(name));
+        Assert.isTrue(nd.isPresent(), "User not found with id: " + name);
         if (!nd.get().getTokenUserKey().equals(UUID.fromString(paseToken.getHeader().get("version").toString()))) {
-            throw new IllegalStateException("Refresh token is invalid for user with id: " + id);
+            throw new IllegalStateException("Refresh token is invalid for user with id: " + name);
         }
         return jwtService.generateToken(nd.get());
+    }
+
+    @Override
+    @PreAuthorize("authentication.name.equals(#nguoiDungLogin.email)")
+    @Transactional(timeout = 3000)
+    public boolean changeUserPassword(NguoiDung.@NonNull NguoiDungLogin nguoiDungLogin) {
+        var nd = nguoiDungRepository.findByEmail(nguoiDungLogin.getEmail()).orElseThrow(() -> new UsernameNotFoundException("Người dùng không tồn tại"));
+        nd.setPassword(passwordEncoder.encode(nguoiDungLogin.getPassword()));
+        nguoiDungRepository.save(nd);
+        return false;
     }
 }

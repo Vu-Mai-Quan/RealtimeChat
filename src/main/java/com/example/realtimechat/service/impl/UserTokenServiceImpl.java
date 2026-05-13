@@ -62,7 +62,7 @@ public class UserTokenServiceImpl implements JwtService<UserDetails> {
         Assert.isInstanceOf(NguoiDung.class, userDetails, "userDetails must not be null");
         var nd = (NguoiDung) userDetails;
         return Jwts.builder()
-                .setSubject(nd.getId().toString())
+                .setSubject(nd.getUsername())
                 .signWith(refreshTokenKey)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExp))
@@ -72,7 +72,7 @@ public class UserTokenServiceImpl implements JwtService<UserDetails> {
     }
 
     @Override
-    public Jws<Claims> parseToken(String token) {
+    public Jws<Claims> parseToken(@NonNull String token) {
         var parser =Jwts.parserBuilder();
         var headerBody = token.split("\\.");
         var tokenWithNoKey = (headerBody[0]+"."+headerBody[1]+".");

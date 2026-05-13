@@ -41,6 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
+
         return excludedPaths.contains(request.getRequestURI());
     }
 
@@ -79,7 +80,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 new TypeReference<Set<String>>() {
                 }).stream().map(SimpleGrantedAuthority::new).collect(java.util.stream.Collectors.toSet());
         var auth = new UsernamePasswordAuthenticationToken(
-                body.getSubject(),
+                body.get("username"),
                 token,
                 roles.isEmpty() ? Set.of() : roles
         );
