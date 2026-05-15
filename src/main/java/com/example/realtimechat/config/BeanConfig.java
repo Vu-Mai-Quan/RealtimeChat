@@ -37,9 +37,6 @@ public class BeanConfig {
 
     @Bean
     UserCache userCache() {
-        Thread.ofVirtual().start(()->{
-            System.out.println("Virtual Thread start");
-        });
         return new SpringCacheBasedUserCache(new ConcurrentMapCache("users"));
     }
 
