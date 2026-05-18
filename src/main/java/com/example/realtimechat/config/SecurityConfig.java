@@ -1,6 +1,7 @@
 package com.example.realtimechat.config;
 
 import com.example.realtimechat.service.JwtService;
+import com.example.realtimechat.service.impl.UserTokenServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,8 +17,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -46,7 +49,7 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
 
     @Bean
-    SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http, JwtService<?> jwtService) throws Exception {
+    SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http, JwtService<UserDetails> jwtService) throws Exception {
         var defaultPublic = new String[]{};
 
         return http.csrf(CsrfConfigurer::disable)
@@ -72,6 +75,7 @@ public class SecurityConfig {
                     source.registerCorsConfiguration("/**", config);
                     cors.configurationSource(source);
                 })
+//                .cors(CorsConfigurer::disable)
                 .build();
     }
 
