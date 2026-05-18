@@ -38,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/auth/refresh-token"
     );
 
-    public JwtFilter(JwtService<?> jwtService, ObjectMapper objectMapper) {
+//    public JwtFilter(JwtService<?> jwtService, ObjectMapper objectMapper) {
         this.jwtService = jwtService;
         this.objectMapper = objectMapper;
     }

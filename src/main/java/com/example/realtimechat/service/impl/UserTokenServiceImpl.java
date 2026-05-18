@@ -1,6 +1,7 @@
 package com.example.realtimechat.service.impl;
 
 import com.example.realtimechat.db1.model.NguoiDung;
+import com.example.realtimechat.db1.repositories.NguoiDungRepository;
 import com.example.realtimechat.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -68,7 +69,6 @@ public class UserTokenServiceImpl implements JwtService<UserDetails> {
                 .signWith(refreshTokenKey)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExp))
-                //có thể lỗi
                 .setHeaderParam(TYPE, REFRESH)
                 .setHeaderParam(VERSION, nd.getTokenUserKey())
                 .compact();

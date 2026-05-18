@@ -21,9 +21,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.sql.Date;
 import java.sql.Driver;
 import java.time.Duration;
+import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 
