@@ -48,6 +48,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http, JwtService<?> jwtService) throws Exception {
         var defaultPublic = new String[]{};
+
         return http.csrf(CsrfConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtFilter(jwtService, objectMapper),

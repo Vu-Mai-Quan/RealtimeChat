@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.ProviderManagerBuilder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.authentication.AuthenticationManagerFactoryBean;
@@ -20,6 +21,8 @@ import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserC
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+import java.util.Objects;
 
 @Configuration
 public class BeanConfig {
@@ -50,11 +53,17 @@ public class BeanConfig {
         dao.setUserCache(userCache);
         return dao;
     }
+
     //@NonNull HttpSecurity security, AuthenticationProvider
     //    authenticationProvider,
+//    @Bean
+//    AuthenticationManager authenticationManager(AuthenticationProvider authenticationProvider, @NonNull HttpSecurity http) throws Exception {
+//      var p =  http.getSharedObject(AuthenticationManagerBuilder.class);
+//      p.authenticationProvider(authenticationProvider);
+//      return Objects.requireNonNull(p.build());
+//    }
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationProvider
-            authenticationProvider) throws Exception {
+    AuthenticationManager authenticationManager(AuthenticationProvider authenticationProvider) {
         return new ProviderManager(authenticationProvider);
     }
 }
