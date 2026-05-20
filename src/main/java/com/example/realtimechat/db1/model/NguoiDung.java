@@ -14,16 +14,11 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.type.SqlTypes;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.swing.text.AsyncBoxView;
-import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "nguoi_dung")
@@ -55,9 +50,12 @@ public class NguoiDung extends EntityBase implements UserDetails {
     @JdbcTypeCode(SqlTypes.LONGNVARCHAR)
     String bio;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    Set<String> roles = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return roles.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override

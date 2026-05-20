@@ -1,7 +1,6 @@
 package com.example.realtimechat.service.impl;
 
 import com.example.realtimechat.db1.model.NguoiDung;
-import com.example.realtimechat.db1.repositories.NguoiDungRepository;
 import com.example.realtimechat.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
