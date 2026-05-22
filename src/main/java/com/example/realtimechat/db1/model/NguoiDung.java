@@ -55,7 +55,8 @@ public class NguoiDung extends EntityBase implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(SimpleGrantedAuthority::new).toList();
+
+        return roles==null||roles.isEmpty()? List.of() :  roles.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override
