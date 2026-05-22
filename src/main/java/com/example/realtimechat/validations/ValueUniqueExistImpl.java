@@ -2,17 +2,21 @@ package com.example.realtimechat.validations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import jdk.dynalink.linker.support.Lookup;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.StringUtils;
+
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 
 
 public class ValueUniqueExistImpl implements ConstraintValidator<ValueUniqueExist, String> {
     private final ApplicationContext applicationContext;
     private JpaRepository<?, ?> repository;
     private String field;
-
+    private static final Lookup lookup = new Lookup(MethodHandles.lookup());
     public ValueUniqueExistImpl(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
@@ -29,8 +33,7 @@ public class ValueUniqueExistImpl implements ConstraintValidator<ValueUniqueExis
                 .replace("{validateValue}", value);
         final String methodName = "existsBy" + StringUtils.capitalize(field);
         try {
-            boolean exists = (boolean) repository.getClass()
-                    .getMethod(methodName, String.class)
+            boolean exists = (boolean) lookup.findVirtual(repository.getClass(),methodName, MethodType.methodType(String.class))
                     .invoke(repository, value.toLowerCase());
             if (exists) {
                 context.disableDefaultConstraintViolation();
@@ -38,7 +41,7 @@ public class ValueUniqueExistImpl implements ConstraintValidator<ValueUniqueExis
                         .addConstraintViolation();
                 return false;
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new RuntimeException("Lỗi khi kiểm tra giá trị độc nhất: " + e.getMessage(), e);
         }
         return true;
