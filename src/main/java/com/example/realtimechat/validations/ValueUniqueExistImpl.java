@@ -33,7 +33,7 @@ public class ValueUniqueExistImpl implements ConstraintValidator<ValueUniqueExis
                 .replace("{validateValue}", value);
         final String methodName = "existsBy" + StringUtils.capitalize(field);
         try {
-            boolean exists = (boolean) lookup.findVirtual(repository.getClass(),methodName, MethodType.methodType(String.class))
+            boolean exists = (boolean) repository.getClass().getDeclaredMethod(methodName, String.class)
                     .invoke(repository, value.toLowerCase());
             if (exists) {
                 context.disableDefaultConstraintViolation();

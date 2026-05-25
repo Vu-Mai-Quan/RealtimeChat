@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.proxy.HibernateProxy;
@@ -32,7 +33,6 @@ public class NguoiDung extends EntityBase implements UserDetails {
 
     @Column(nullable = false, unique = true, updatable = false, length = 100)
     @ColumnTransformer(write = "LOWER(?)")
-
     String email;
 
     String password;
@@ -51,12 +51,12 @@ public class NguoiDung extends EntityBase implements UserDetails {
     String bio;
 
     @JdbcTypeCode(SqlTypes.JSON)
+    @ColumnDefault("'[]'")
     Set<String> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return roles==null||roles.isEmpty()? List.of() :  roles.stream().map(SimpleGrantedAuthority::new).toList();
+        return roles == null || roles.isEmpty() ? List.of() : roles.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override

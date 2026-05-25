@@ -28,7 +28,6 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID>, Jpa
 
         return (root, query, cb) -> {
             assert query != null;
-
             query.groupBy(root.get(NguoiDung_.email)).having(cb.lessThan(root.get(NguoiDung_.creationTime), LocalDateTime.now()));
             return cb.and(cb.lessThan(root.get(NguoiDung_.email), ""), cb.lessThan(root.get(NguoiDung_.email), ""));
         };
