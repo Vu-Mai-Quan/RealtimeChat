@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Participant {
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nguoi_dung_id", nullable = false)
     NguoiDung nguoiDung;
