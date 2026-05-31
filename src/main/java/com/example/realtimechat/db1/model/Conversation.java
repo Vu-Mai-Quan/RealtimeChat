@@ -15,7 +15,6 @@ import java.util.UUID;
 
 @Table(name = "tbl_conversation", indexes = {
         @Index(name = "idx_last_message_at", columnList = "last_message_at DESC"),
-        @Index(name = "idx_create_at", columnList = "create_at DESC")
 })
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,7 +32,9 @@ public class Conversation {
     Type type;
 
     @ElementCollection
-    @CollectionTable(name = "room_participant", joinColumns = @JoinColumn(name = "room_id"))
+    @CollectionTable(name = "room_participant", joinColumns = @JoinColumn(name = "room_id"),
+            indexes = {@Index(name = "idx_room_id", columnList = "nguoi_dung_id")})
+    @OrderBy("nguoi_dung_id desc")
     List<Participant> participants;
 
     @Embedded
@@ -41,6 +42,7 @@ public class Conversation {
 
     @Column(name = "last_message_at")
     @CreationTimestamp
+    @OrderBy("asc")
     LocalDateTime lastMessageAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -58,6 +60,7 @@ public class Conversation {
     @CollectionTable(name = "unread_count", joinColumns = @JoinColumn(name = "conversation_id"))
     @MapKeyJoinColumn(name = "nguoi_dung_id")
     @Column(name = "unread_count")
+    @ElementCollection
     Map<NguoiDung, Integer> unreadCount;
 
     public enum Type {

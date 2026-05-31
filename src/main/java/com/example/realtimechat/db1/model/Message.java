@@ -13,8 +13,10 @@ import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Table(name = "tbl_message",indexes = {
-        @Index(name = "idx_conversation_and_create_at", unique = true, columnList = "conversation_id ASC, create_at DESC")
+@Table(name = "tbl_message", indexes = {
+        @Index(name = "idx_conversation_and_create_at", unique = true,
+                columnList = "conversation_id ASC, create_at DESC"),
+
 })
 @Entity
 @NoArgsConstructor
@@ -25,7 +27,11 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)
-    private UUID id;
+    UUID id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conversation_id", nullable = false)
+    Conversation conversation;
 
     @ManyToOne()
     @JoinColumn(nullable = false, name = "sender_id")
@@ -37,7 +43,7 @@ public class Message {
     @Column(name = "image_url")
     String imageUrl;
 
-    @Column(nullable = false,name = "create_at")
+    @Column(nullable = false, name = "create_at")
     @CreationTimestamp
     LocalDateTime createAt;
 }
