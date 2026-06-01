@@ -34,6 +34,7 @@ public class Friend {
     LocalDateTime createdAt;
 
     @PrePersist
+    @PreUpdate
     public void sortUser() {
         if (userA.getId().compareTo(userB.getId()) > 0) {
             NguoiDung temp = userA;
