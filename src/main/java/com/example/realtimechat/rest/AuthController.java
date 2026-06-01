@@ -88,7 +88,7 @@ public class AuthController {
         return null;
     }
 
-    private @NonNull ProblemDetail getProblemDetail(HttpStatus status, String detail,
+    public static @NonNull ProblemDetail getProblemDetail(HttpStatus status, String detail,
                                                     @NonNull HttpServletRequest httpRequest, String title) {
         var p = ProblemDetail.forStatusAndDetail(status, detail);
         p.setInstance(URI.create(httpRequest.getRequestURI()));

@@ -55,6 +55,7 @@ public class Conversation {
     @Column(name = "create_at")
     LocalDateTime createAt;
 
+    @Embedded
     LastMessage lastMessage;
 
     @CollectionTable(name = "unread_count", joinColumns = @JoinColumn(name = "conversation_id"))
