@@ -46,4 +46,9 @@ public class Message {
     @Column(nullable = false, name = "create_at")
     @CreationTimestamp
     LocalDateTime createAt;
+
+    @PrePersist
+    void trimContent() {
+        this.content = this.content.trim();
+    }
 }

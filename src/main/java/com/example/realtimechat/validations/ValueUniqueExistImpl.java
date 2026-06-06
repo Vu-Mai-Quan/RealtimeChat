@@ -1,6 +1,7 @@
 package com.example.realtimechat.validations;
 
 import com.example.realtimechat.db1.repositories.FieldExist;
+import jakarta.el.MethodNotFoundException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,9 @@ public class ValueUniqueExistImpl implements ConstraintValidator<ValueUniqueExis
         try {
             fieldExist = context.getBean(constraintAnnotation.repository());
         } catch (BeansException e) {
-            throw new RuntimeException("Lấy bean không hợp lệ", e);
+            throw new IllegalStateException("Lấy bean không hợp lệ", e);
+        } catch (MethodNotFoundException e) {
+            throw new IllegalStateException(e);
         }
     }
 

@@ -65,7 +65,8 @@ public class SecurityConfig {
                         org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .cors(cors -> {
                     var config = new CorsConfiguration();
-                    config.addAllowedOriginPattern("*");
+//                    config.addAllowedOriginPattern("*");
+                    config.setAllowedOrigins(List.of("http://localhost:4200"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);

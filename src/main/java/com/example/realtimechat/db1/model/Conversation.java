@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.REMOVE;
+
 @Table(name = "tbl_conversation", indexes = {
         @Index(name = "idx_last_message_at", columnList = "last_message_at DESC"),
 })
@@ -41,7 +44,6 @@ public class Conversation {
     Group group;
 
     @Column(name = "last_message_at")
-    @CreationTimestamp
     @OrderBy("asc")
     LocalDateTime lastMessageAt;
 
@@ -55,7 +57,8 @@ public class Conversation {
     @Column(name = "create_at")
     LocalDateTime createAt;
 
-    @Embedded
+    @OneToOne(fetch = FetchType.EAGER, cascade = {REMOVE, PERSIST}, orphanRemoval = true)
+    @JoinColumn(name = "last_message_id")
     LastMessage lastMessage;
 
     @CollectionTable(name = "unread_count", joinColumns = @JoinColumn(name = "conversation_id"))
