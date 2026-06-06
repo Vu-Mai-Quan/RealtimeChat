@@ -1,6 +1,5 @@
 package com.example.realtimechat.templates.identity;
 
-import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

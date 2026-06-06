@@ -107,8 +107,8 @@ public class NguoiDung extends EntityBase implements UserDetails {
     @NoArgsConstructor
     public static class NguoiDungLogin {
         @Email(message = "Định dạng email không hợp lệ")
-        @ValueUniqueExist(field = "email", repository = NguoiDungRepository.class,
-                groups = {GroupValidation.OnCreate.class})
+        @ValueUniqueExist(repository = NguoiDungRepository.class,
+                groups = {GroupValidation.OnCreate.class}, message = "Email đã tồn tại")
         String email;
         @NotBlank(message = "Mật khẩu không được để trống")
         String password;

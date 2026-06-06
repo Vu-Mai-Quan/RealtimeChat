@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID>, JpaSpecificationExecutor<NguoiDung> {
+public interface NguoiDungRepository extends FieldExist, JpaRepository<NguoiDung, UUID>, JpaSpecificationExecutor<NguoiDung> {
     boolean existsByEmail(@NonNull String email);
 
     Optional<NguoiDung> findByEmail(@NonNull String email);
@@ -31,5 +32,9 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID>, Jpa
             query.groupBy(root.get(NguoiDung_.email)).having(cb.lessThan(root.get(NguoiDung_.creationTime), LocalDateTime.now()));
             return cb.and(cb.lessThan(root.get(NguoiDung_.email), ""), cb.lessThan(root.get(NguoiDung_.email), ""));
         };
+    }
+    @Override
+    default boolean fieldExistByValue(String value) {
+        return existsByEmail(value);
     }
 }
