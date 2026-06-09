@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface NguoiDungRepository extends FieldExist, JpaRepository<NguoiDung, UUID>{
+public interface NguoiDungRepository extends FieldExist, JpaRepository<NguoiDung, UUID> {
     boolean existsByEmail(@NonNull String email);
 
     Optional<NguoiDung> findByEmail(@NonNull String email);
@@ -23,14 +23,13 @@ public interface NguoiDungRepository extends FieldExist, JpaRepository<NguoiDung
     @Transactional
     void updateVersionToken(UUID id, UUID newValue);
 
-    @Query("SELECT u FROM NguoiDung u WHERE u.email IN (:email1, :email2) " +
-            "ORDER BY CASE WHEN u.email = :currentUser THEN 0 ELSE 1 END ASC")
+    @Query("SELECT u FROM NguoiDung u WHERE u.email IN (?1, ?2) " +
+            "ORDER BY CASE WHEN u.email = ?3 THEN 0 ELSE 1 END ASC")
     List<NguoiDung> findParticipants(
-            @Param("email1") String email1,
-            @Param("email2") String email2,
-            @Param("currentUser") String currentUser
+            String email1,
+            String email2,
+            String currentUser
     );
-
 
 
     @Override
