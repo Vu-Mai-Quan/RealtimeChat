@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -31,12 +32,15 @@ public class FriendServiceImpl implements com.example.realtimechat.service.Frien
         if (currentUser.equals(rq.toUsername())) {
             throw new IllegalArgumentException("Cannot send friend request to yourself");
         }
-        var to = nguoiDungRepository.findByEmail(rq.toUsername()).orElseThrow(() -> new AccountNotFoundException(
-                "User with email " + rq.toUsername() + " not found"));
-        var from =
-                nguoiDungRepository.findByEmail(currentUser).orElseThrow(() -> new AccountNotFoundException(
-                        "Current user not found"));
 
+        var lsFromTo = nguoiDungRepository.findParticipants(currentUser, rq.toUsername(), currentUser);
+        if (lsFromTo.size() != 2) {
+            throw new AccountNotFoundException(
+                    "User with email " + rq.toUsername() + " not found");
+        }
+        lsFromTo.stream().filter(nguoiDung -> nguoiDung.getEmail().equals(rq.toUsername())).findFirst().orElseThrow(() -> new AccountNotFoundException("User with email " + rq.toUsername() + " not found"));
+        var to = lsFromTo.get(1);
+        var from = lsFromTo.get(0);
         Example<Friend> exampleFriend =
                 Example.of(new Friend(new CompositeFriendId(from.getId(), to.getId()),
                         null, null, null));

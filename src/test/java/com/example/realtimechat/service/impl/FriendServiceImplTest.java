@@ -68,10 +68,10 @@ class FriendServiceImplTest {
 
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
                 "vumaiquan28062002@gmail.com", "test"));
-//        FriendRequest.FriendRequestDTO rq = new FriendRequest.FriendRequestDTO("vumaiquan28062002@gmail.com", ""),
-//                rq1 = new FriendRequest.FriendRequestDTO("vumaiquan280620@gmail.com", "");
+        FriendRequest.FriendRequestDTO rq = new FriendRequest.FriendRequestDTO("vumaiquan28062002@gmail.com", ""),
+                rq1 = new FriendRequest.FriendRequestDTO("vumaiquan280620@gmail.com", "");
 //        assertThrows(IllegalArgumentException.class, () -> friendService.sendFriendRequest(rq));
-//        assertThrows(AccountNotFoundException.class, () -> friendService.sendFriendRequest(rq1));
+        assertThrows(AccountNotFoundException.class, () -> friendService.sendFriendRequest(rq1));
         assertTrue(friendService.sendFriendRequest(new FriendRequest.FriendRequestDTO("vumaiquan280602@gmail.com",
                 "")));
         assertThrows(IllegalStateException.class,
