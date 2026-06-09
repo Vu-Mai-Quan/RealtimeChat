@@ -19,7 +19,6 @@ public interface NguoiDungRepository extends FieldExist, JpaRepository<NguoiDung
     @Modifying
     @Transactional
     void updateVersionToken(UUID id, UUID newValue);
-
     @Override
     default boolean fieldExistByValue(String value) {
         return existsByEmail(value);

@@ -6,7 +6,7 @@ spring:
         '[format_sql]': true
         '[show_sql]': true
         hbm2ddl:
-          auto: update
+          auto: none
         highlight_sql: true
         order_inserts: true
         order_updates: true

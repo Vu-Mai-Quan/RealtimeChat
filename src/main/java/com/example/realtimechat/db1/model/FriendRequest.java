@@ -2,12 +2,10 @@ package com.example.realtimechat.db1.model;
 
 import com.example.realtimechat.templates.identity.CompositeFriendId;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +19,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class FriendRequest {
+@Builder
+public class FriendRequest implements Persistable<CompositeFriendId> {
     @EmbeddedId
     CompositeFriendId compositeFriendId;
 
@@ -37,6 +36,24 @@ public class FriendRequest {
     @Column(length = 300)
     String message;
 
+    @Transient
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private boolean isNewRecord = true;
+
     @CreationTimestamp
     LocalDateTime timestamp;
+
+    @Override
+    public CompositeFriendId getId() {
+        return this.compositeFriendId;
+    }
+    @Override
+    public boolean isNew() {
+        return isNewRecord;
+    }
+
+
+    public record FriendRequestDTO(String toUsername, String message) {
+    }
 }

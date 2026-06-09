@@ -1,5 +1,6 @@
 package com.example.realtimechat.rest;
 
+import com.example.realtimechat.db1.model.FriendRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ public class FriendController {
     private static final Logger log = LoggerFactory.getLogger(FriendController.class);
 
     @PostMapping
-    ResponseEntity<?> addFriend(HttpServletRequest request) {
+    ResponseEntity<?> addFriend(HttpServletRequest request,@RequestBody FriendRequest.FriendRequestDTO dto) {
         try {
             return ResponseEntity.ok("");
         } catch (RuntimeException e) {
