@@ -18,10 +18,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
@@ -40,18 +40,16 @@ public class SecurityConfig {
             POST, new String[]{
                     "/auth/sign-in",
                     "/auth/sign-up",
-
-
             },
             GET, new String[]{"/auth/refresh-token",},
             PATCH, new String[]{"/auth/sign-out",}
     );
-    private final
-    ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     @Bean
-    SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http, JwtService<?> jwtService) throws Exception {
+    SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http, JwtService<UserDetails> jwtService) throws Exception {
         var defaultPublic = new String[]{};
+
         return http.csrf(CsrfConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtFilter(jwtService, objectMapper),
@@ -67,14 +65,16 @@ public class SecurityConfig {
                         org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .cors(cors -> {
                     var config = new CorsConfiguration();
-                    config.addAllowedOrigin("http://localhost:4200");
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+//                    config.addAllowedOriginPattern("*");
+                    config.setAllowedOrigins(List.of("http://localhost:4200"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
                     var source = new UrlBasedCorsConfigurationSource();
                     source.registerCorsConfiguration("/**", config);
                     cors.configurationSource(source);
                 })
+//                .cors(CorsConfigurer::disable)
                 .build();
     }
 

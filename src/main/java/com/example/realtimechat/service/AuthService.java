@@ -16,6 +16,8 @@ public interface AuthService {
 
     String createTokenFromRefreshToken(String refresh);
 
+    boolean changeUserPassword(NguoiDungLogin nguoiDungLogin);
+
     @Builder
     record SignInResponse(String token, @JsonIgnore String refreshToken, Map<String, Object> userInfo) {
     }

@@ -10,7 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +22,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Set;
 
+import static com.example.realtimechat.service.impl.UserTokenServiceImpl.ROLES;
+import static com.example.realtimechat.service.impl.UserTokenServiceImpl.USERNAME;
+
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService<?> jwtService;
@@ -34,13 +36,14 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/auth/refresh-token"
     );
 
-    public JwtFilter(@Qualifier("userTokenServiceImpl") JwtService<?> jwtService, ObjectMapper objectMapper) {
+    public JwtFilter(JwtService<?> jwtService, ObjectMapper objectMapper) {
         this.jwtService = jwtService;
         this.objectMapper = objectMapper;
     }
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
+
         return excludedPaths.contains(request.getRequestURI());
     }
 
@@ -74,12 +77,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private @NonNull Authentication authentication(final String token, HttpServletRequest req) {
         var body = jwtService.parseToken(token).getBody();
-        Set<SimpleGrantedAuthority> roles = objectMapper.convertValue(body.get("roles") == null ? Set.of() :
-                        body.get("roles"),
+        var roles = objectMapper.convertValue(body.get(ROLES) == null ? Set.of() :
+                        body.get(ROLES),
                 new TypeReference<Set<String>>() {
-                }).stream().map(SimpleGrantedAuthority::new).collect(java.util.stream.Collectors.toSet());
+                }).stream().map(SimpleGrantedAuthority::new).collect(java.util.stream.Collectors.toList());
         var auth = new UsernamePasswordAuthenticationToken(
-                body.getSubject(),
+                body.get(USERNAME),
                 token,
                 roles.isEmpty() ? Set.of() : roles
         );

@@ -14,16 +14,14 @@ import lombok.experimental.FieldDefaults;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.flyway.FlywayProperties;
 import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.sql.Date;
-import java.sql.Driver;
 import java.time.Duration;
+import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 
@@ -90,7 +88,7 @@ public class AuthController {
         return null;
     }
 
-    private @NonNull ProblemDetail getProblemDetail(HttpStatus status, String detail,
+    public static @NonNull ProblemDetail getProblemDetail(HttpStatus status, String detail,
                                                     @NonNull HttpServletRequest httpRequest, String title) {
         var p = ProblemDetail.forStatusAndDetail(status, detail);
         p.setInstance(URI.create(httpRequest.getRequestURI()));
@@ -114,14 +112,14 @@ public class AuthController {
     ResponseEntity<?> refreshToken(HttpServletRequest httpRequest) {
         var token = getRefreshFromRq(httpRequest);
         if (token == null) {
-           var p = getProblemDetail(HttpStatus.BAD_REQUEST, "Token " +
-                    "lỗi",httpRequest, "refresh-token-error");
+            var p = getProblemDetail(HttpStatus.BAD_REQUEST, "Token " +
+                    "lỗi", httpRequest, "refresh-token-error");
             return ResponseEntity.badRequest().body(p);
         }
-       try {
-           return ResponseEntity.ok(Map.of("token", authService.createTokenFromRefreshToken(token)));
-       }catch (JwtException e){
-           return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
-       }
+        try {
+            return ResponseEntity.ok(Map.of("token", authService.createTokenFromRefreshToken(token)));
+        } catch (JwtException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        }
     }
 }

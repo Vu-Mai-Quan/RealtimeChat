@@ -1,8 +1,8 @@
 package com.example.realtimechat.validations;
 
+import com.example.realtimechat.db1.repositories.FieldExist;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -19,16 +19,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
 public @interface ValueUniqueExist {
-    String field();
 
-    String message() default "Email ${validateValue} đã tồn tại";
+    String message() default "Giá trị đã tồn tại";
 
-    /**
-     * Repository để kiểm tra giá trị đã tồn tại hay chưa.
-     * Phải có phương thức boolean existsBy${field}(String value) để kiểm tra giá trị đã tồn tại hay chưa.
-     *
-     */
-    Class<? extends JpaRepository<?, ?>> repository();
+    Class<? extends FieldExist> repository();
 
     Class<?>[] groups() default {};
 
