@@ -1,17 +1,9 @@
 package com.example.realtimechat.service.impl;
 
-import com.example.realtimechat.db1.model.NguoiDung;
-import com.example.realtimechat.db1.repositories.NguoiDungRepository;
-import com.example.realtimechat.mapper.NguoiDungMapper;
-import com.example.realtimechat.service.AuthService;
-import com.example.realtimechat.service.JwtService;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.lang.Assert;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.jspecify.annotations.NonNull;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,9 +17,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import com.example.realtimechat.db1.model.NguoiDung;
+import com.example.realtimechat.db1.repositories.NguoiDungRepository;
+import com.example.realtimechat.mapper.NguoiDungMapper;
+import com.example.realtimechat.service.AuthService;
+import com.example.realtimechat.service.JwtService;
+
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.lang.Assert;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

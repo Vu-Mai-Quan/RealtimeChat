@@ -1,11 +1,12 @@
 package com.example.realtimechat.service;
 
+import java.util.Map;
+
 import com.example.realtimechat.db1.model.NguoiDung.NguoiDungDangKi;
 import com.example.realtimechat.db1.model.NguoiDung.NguoiDungLogin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
 
-import java.util.Map;
+import lombok.Builder;
 
 public interface AuthService {
     boolean signUp(NguoiDungDangKi nguoiDungDangKi);

@@ -1,14 +1,11 @@
 package com.example.realtimechat.config;
 
-import com.example.realtimechat.service.JwtService;
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.JwtException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import static com.example.realtimechat.service.impl.UserTokenServiceImpl.ROLES;
+import static com.example.realtimechat.service.impl.UserTokenServiceImpl.USERNAME;
+
+import java.io.IOException;
+import java.util.Set;
+
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -19,11 +16,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.Set;
+import com.example.realtimechat.service.JwtService;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static com.example.realtimechat.service.impl.UserTokenServiceImpl.ROLES;
-import static com.example.realtimechat.service.impl.UserTokenServiceImpl.USERNAME;
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtFilter extends OncePerRequestFilter {
 

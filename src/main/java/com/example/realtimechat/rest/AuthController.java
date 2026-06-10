@@ -1,23 +1,6 @@
 package com.example.realtimechat.rest;
 
-import com.example.realtimechat.db1.model.NguoiDung;
-import com.example.realtimechat.db1.model.NguoiDung.NguoiDungLogin;
-import com.example.realtimechat.service.AuthService;
-import com.example.realtimechat.validations.GroupValidation;
-import io.jsonwebtoken.JwtException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import jakarta.validation.groups.Default;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.server.Cookie;
-import org.springframework.http.*;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import static com.example.realtimechat.service.impl.UserTokenServiceImpl.TokenType.REFRESH;
 
 import java.net.URI;
 import java.time.Duration;
@@ -25,7 +8,35 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.example.realtimechat.service.impl.UserTokenServiceImpl.TokenType.REFRESH;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.server.Cookie;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.realtimechat.db1.model.NguoiDung;
+import com.example.realtimechat.db1.model.NguoiDung.NguoiDungLogin;
+import com.example.realtimechat.service.AuthService;
+import com.example.realtimechat.validations.GroupValidation;
+
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequestMapping("/auth/")

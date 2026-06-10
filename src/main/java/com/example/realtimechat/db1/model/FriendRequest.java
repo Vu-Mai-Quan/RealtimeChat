@@ -1,13 +1,28 @@
 package com.example.realtimechat.db1.model;
 
-import com.example.realtimechat.templates.identity.CompositeFriendId;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.Persistable;
 
-import java.time.LocalDateTime;
+import com.example.realtimechat.templates.identity.CompositeFriendId;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 @Table(name = "tbl_friend_request", indexes = {
         @Index(name = "idx_from_to", columnList = "from_user_id ASC, to_user_id ASC", unique = true),

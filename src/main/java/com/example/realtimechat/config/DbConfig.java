@@ -1,6 +1,9 @@
 package com.example.realtimechat.config;
 
-import com.zaxxer.hikari.HikariDataSource;
+import java.util.Objects;
+
+import javax.sql.DataSource;
+
 import org.jspecify.annotations.NonNull;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,8 +17,7 @@ import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
-import javax.sql.DataSource;
-import java.util.Objects;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.example.realtimechat.db1")

@@ -1,7 +1,22 @@
 package com.example.realtimechat.service.impl;
 
+import static io.jsonwebtoken.Header.TYPE;
+import static jakarta.persistence.CascadeType.REFRESH;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
 import com.example.realtimechat.db1.model.NguoiDung;
 import com.example.realtimechat.service.JwtService;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -9,19 +24,6 @@ import io.jsonwebtoken.lang.Assert;
 import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static io.jsonwebtoken.Header.TYPE;
-import static jakarta.persistence.CascadeType.REFRESH;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

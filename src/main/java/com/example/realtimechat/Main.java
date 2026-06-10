@@ -1,9 +1,9 @@
 package com.example.realtimechat;
 
+import java.lang.instrument.Instrumentation;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.lang.instrument.Instrumentation;
 
 @SpringBootApplication
 public class Main {

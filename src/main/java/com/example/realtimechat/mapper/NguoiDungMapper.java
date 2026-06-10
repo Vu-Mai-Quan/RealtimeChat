@@ -1,8 +1,15 @@
 package com.example.realtimechat.mapper;
 
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
+
 import com.example.realtimechat.db1.model.NguoiDung;
 import com.example.realtimechat.db1.model.NguoiDung.NguoiDungDangKi;
-import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public abstract class NguoiDungMapper {

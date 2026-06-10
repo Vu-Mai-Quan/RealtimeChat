@@ -1,15 +1,17 @@
 package com.example.realtimechat.validations;
 
-import com.example.realtimechat.db1.repositories.FieldExist;
-import jakarta.el.MethodNotFoundException;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+
+import com.example.realtimechat.db1.repositories.FieldExist;
+
+import jakarta.el.MethodNotFoundException;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ValueUniqueExistImpl implements ConstraintValidator<ValueUniqueExist, String> {

@@ -1,14 +1,18 @@
 package com.example.realtimechat.validations;
 
-import com.example.realtimechat.db1.repositories.FieldExist;
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
+import static java.lang.annotation.ElementType.CONSTRUCTOR;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.example.realtimechat.db1.repositories.FieldExist;
+
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 /**
  * Kiểm tra giá trị độc nhất đã tồn tại trong cơ sở dữ liệu hay chưa.
