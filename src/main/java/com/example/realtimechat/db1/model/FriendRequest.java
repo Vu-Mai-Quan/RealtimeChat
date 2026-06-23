@@ -54,6 +54,7 @@ public class FriendRequest implements Persistable<CompositeFriendId> {
     @Transient
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
+    @Builder.Default
     private boolean isNewRecord = true;
 
     @CreationTimestamp

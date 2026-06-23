@@ -86,12 +86,9 @@ public class AuthServiceImpl implements AuthService {
 
         var paseToken = jwtService.parseToken(refreshToken);
         var name = paseToken.getBody().getSubject();
-        var cache = userCache.getUserFromCache(name);
         Optional<NguoiDung> nd = nguoiDungRepository.findByEmail(name);
-//                Optional.ofNullable(cache instanceof NguoiDung n ? n : null)
-//                .or(() -> nguoiDungRepository.findByEmail(name));
         Assert.isTrue(nd.isPresent(), "User not found with id: " + name);
-        if (!nd.get().getTokenUserKey().equals(UUID.fromString(paseToken.getHeader().get("version").toString()))) {
+        if (!nd.get().getTokenUserKey().equals(UUID.fromString(paseToken.getHeader().get(UserTokenServiceImpl.VERSION).toString()))) {
             throw new IllegalStateException("Refresh token is invalid for user with id: " + name);
         }
         return jwtService.generateToken(nd.get());

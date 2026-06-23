@@ -7,9 +7,9 @@ spring:
         '[show_sql]': true
         hbm2ddl:
           auto: none
-        highlight_sql: true
-        order_inserts: true
-        order_updates: true
+        '[highlight_sql]': true
+        '[order_inserts]': true
+        '[order_updates]': true
   datasource:
     db1:
       jdbc-url: ${DB_URL}
@@ -17,15 +17,6 @@ spring:
       password: ${DB_PASSWORD}
       pool-name: HikariPool-2
       connection-timeout: 30000
-#      data-source-class-name: com.mysql.cj.jdbc.MysqlDataSource
-#      data-source-properties:
-#        databaseName: ${DB_NAME}
-#        user: ${DB_USERNAME:root}
-#        password: ${DB_PASSWORD}
-#        allowPublicKeyRetrieval: true
-#        useSSL: false
-#        serverTimezone: UTC
-#        characterEncoding: UTF-8
 logging:
   level:
     '[com.zaxxer.hikari.HikariDataSource]': DEBUG

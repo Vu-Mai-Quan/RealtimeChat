@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +20,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompositeFriendId implements Serializable {
 
-    UUID userA;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1128160230307559370L;
+
+	UUID userA;
 
     UUID userB;
 
@@ -32,4 +39,5 @@ public class CompositeFriendId implements Serializable {
     public int hashCode() {
         return Objects.hash(userA, userB);
     }
+ 
 }

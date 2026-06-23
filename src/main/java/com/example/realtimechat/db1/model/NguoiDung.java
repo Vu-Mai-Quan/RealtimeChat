@@ -1,7 +1,7 @@
 package com.example.realtimechat.db1.model;
 
+import java.io.Serial;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -47,6 +47,11 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class NguoiDung extends EntityBase implements UserDetails {
 
+    /**
+     *
+     */
+    @Serial private static final long serialVersionUID = 6126107163171470650L;
+
     @Column(nullable = false, unique = true, updatable = false, length = 100)
     @ColumnTransformer(write = "LOWER(?)")
     String email;
@@ -68,7 +73,7 @@ public class NguoiDung extends EntityBase implements UserDetails {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @ColumnDefault("'[]'")
-    Set<String> roles = new HashSet<>();
+    Set<String> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -100,8 +105,10 @@ public class NguoiDung extends EntityBase implements UserDetails {
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
+                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         NguoiDung nguoiDung = (NguoiDung) o;
         return getId() != null && Objects.equals(getId(), nguoiDung.getId());
@@ -109,7 +116,9 @@ public class NguoiDung extends EntityBase implements UserDetails {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+        return this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
+                getClass().hashCode();
     }
 
     /**
@@ -154,5 +163,9 @@ public class NguoiDung extends EntityBase implements UserDetails {
         public String getDisplayName() {
             return firstName.trim() + " " + lastName.trim();
         }
+    }
+
+    public record NguoiDungDisplay(String displayName, String avatarUrl, UUID id) {
+
     }
 }

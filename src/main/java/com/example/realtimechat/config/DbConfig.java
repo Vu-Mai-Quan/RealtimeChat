@@ -23,10 +23,11 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableJpaRepositories(basePackages = "com.example.realtimechat.db1")
 @EnableConfigurationProperties(JpaProperties.class)
 public class DbConfig {
-
+	
+	
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.db1")
-    public DataSource dataSourceOne() {
+    DataSource dataSourceOne() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 
